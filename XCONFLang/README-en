@@ -1,0 +1,52 @@
+
+We have four (4) input parameters for the tool:
+1) IOVPTS model of the specification
+2) IUT IOVPTS model
+3) VPA for the desirable language
+4) VPA for the undesirable, or "failed", language
+
+The IOVPTS model text file must be described as follows:
+1) The first 5 lines define the sets of actions:
+  line 1, CALLs;
+  line 2, RETURNs;
+  line 3, INTERNALs;
+  line 4, INPUTs;
+  line 5, OUTPUTs.
+
+2) Sixth line defines the stack symbols
+
+3) Line 7 describes the set of model states
+
+Note that: 
+a) At each line, elements are separated by commas
+b) For an empty set, we leave a blank line (skip a line) in the file
+
+4) From line 8 onwards, we define the model transitions. Each transition must be in the form s,a,Z,q, line by line, where s is the source state, a is the action, Z is the stack symbol and q is the target state.
+
+5) After all transitions symbol #  indicates the end, and on the next line put the initial state. Then put the symbol - (dash) to indicate the end of the specification. For instance:
+#
+s0
+-
+
+Similarly, we describe a VPA model, with the following adjustments:
+1) Delete lines 4 and 5 (since doesn't make sense INPUT and OUTPUT sets)
+2) After the set of states (line 5, formerly 7), also define the set of final states
+3) For the empty word (\epsilon) we use the symbol @, similarly to \varsigma (internal)
+
+Remarks:
+1- Whenever there are more items (symbols, states, actions, etc.) per line, separate them with a comma.
+2- Do not add any symbol (dot, semicolon, etc.) at the end of each line.
+3- If any set is empty (for example, the model has no internal actions), leave a blank line.
+4- A simple transition (from Li) or an internal transition (with \varsigma) is defined by @ for the stack symbol, in the same vein for the empty symbol \epsilon.
+5- The empty stack symbol (\bot) is defined by *.
+
+###########
+
+Run the command line "python2.7 DCCL.pyc $1 $2 $3 $4" in a shell where $1, $2, $3, and $4 are the models' text files of the specification (IOVPTS), IUT (IOVPTS), VPA for the desirable language and VPA for undesirable language, respectively.
+
+Example: 
+
+	python2.7 DCCL.pyc iovpts-spec.txt iovpts-impl.txt vpa-D-anbnx.txt vpa-F-anbn+1.txt
+
+###########
+
